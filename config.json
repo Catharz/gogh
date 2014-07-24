@@ -1,6 +1,6 @@
 {
   "Sites": [
       {"Name": "Google", "Url": "http://www.google.com"},
-      {"Name": "Google AU", "Url": "http://www.google.com.au"}
+      {"Name": "Google Australia", "Url": "http://www.google.com.au"}
   ]
 }

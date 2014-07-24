@@ -86,5 +86,5 @@ func hammer(site Site, wg *sync.WaitGroup) {
 }
 
 func usage() {
-	fmt.Printf("gogh config.json")
+  fmt.Println("Usage: gogh config.json")
 }
