@@ -11,15 +11,6 @@ import (
 	"time"
 )
 
-type Site struct {
-	Name string
-	Url  string
-}
-
-type SiteList struct {
-	Sites []Site
-}
-
 func main() {
 	os.Exit(realMain())
 }
@@ -29,13 +20,14 @@ func realMain() int {
 
 	if len(args) < 1 {
 		usage()
-		return -1
+		return 1
 	}
 	fileName := args[0]
 
 	file, err := os.Open(fileName)
 	if err != nil {
 		log.Fatal(err)
+		return 1
 	}
 	defer file.Close()
 	siteList := parseSites(file)
@@ -53,9 +45,9 @@ func realMain() int {
 	return 0
 }
 
-func parseSites(file *os.File) SiteList {
+func parseSites(file *os.File) struct{ Sites []struct{ Name, Url string } } {
+	siteList := struct{ Sites []struct{ Name, Url string } }{}
 	decoder := json.NewDecoder(file)
-	siteList := SiteList{}
 	err := decoder.Decode(&siteList)
 
 	if err != nil {
@@ -65,7 +57,7 @@ func parseSites(file *os.File) SiteList {
 	return siteList
 }
 
-func hammer(site Site, wg *sync.WaitGroup) {
+func hammer(site struct{ Name, Url string }, wg *sync.WaitGroup) {
 	startTime := time.Now()
 	response, err := http.Get(site.Url)
 
@@ -86,5 +78,5 @@ func hammer(site Site, wg *sync.WaitGroup) {
 }
 
 func usage() {
-  fmt.Println("Usage: gogh config.json")
+	fmt.Println("Usage: gogh config.json")
 }
