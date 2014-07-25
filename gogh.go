@@ -30,13 +30,13 @@ func realMain() int {
 		return 1
 	}
 	defer file.Close()
-  siteList := parseSites(file)
-  fmt.Println("processing", len(siteList.Sites), "sites")
+	siteList := parseSites(file)
+	fmt.Println("processing", len(siteList.Sites), "sites")
 
 	var wg sync.WaitGroup
-  wg.Add(len(siteList.Sites))
+	wg.Add(len(siteList.Sites))
 
-  for _, site := range siteList.Sites {
+	for _, site := range siteList.Sites {
 		fmt.Println("testing:", site.Name)
 		go hammer(site, &wg)
 	}
@@ -45,8 +45,8 @@ func realMain() int {
 	return 0
 }
 
-func parseSites(file *os.File) struct {Sites []struct {Name, Url string}} {
-  siteList := struct {Sites []struct {Name, Url string}} { }
+func parseSites(file *os.File) struct{ Sites []struct{ Name, Url string } } {
+	siteList := struct{ Sites []struct{ Name, Url string } }{}
 	decoder := json.NewDecoder(file)
 	err := decoder.Decode(&siteList)
 
@@ -57,7 +57,7 @@ func parseSites(file *os.File) struct {Sites []struct {Name, Url string}} {
 	return siteList
 }
 
-func hammer(site struct {Name, Url string}, wg *sync.WaitGroup) {
+func hammer(site struct{ Name, Url string }, wg *sync.WaitGroup) {
 	startTime := time.Now()
 	response, err := http.Get(site.Url)
 
@@ -78,5 +78,5 @@ func hammer(site struct {Name, Url string}, wg *sync.WaitGroup) {
 }
 
 func usage() {
-  fmt.Println("Usage: gogh config.json")
+	fmt.Println("Usage: gogh config.json")
 }
