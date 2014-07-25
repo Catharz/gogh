@@ -29,13 +29,14 @@ func realMain() int {
 
 	if len(args) < 1 {
 		usage()
-		return -1
+		return 1
 	}
 	fileName := args[0]
 
 	file, err := os.Open(fileName)
 	if err != nil {
 		log.Fatal(err)
+		return 1
 	}
 	defer file.Close()
 	siteList := parseSites(file)
